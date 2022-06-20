@@ -1,5 +1,6 @@
 # PixelKit
 powered by google
 
-# Use
+# Instructions
 idk
+just press buttons until it works
