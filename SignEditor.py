@@ -4,14 +4,36 @@
 from tkinter import *
 import re
 
+import keyboard # pip install keyboard
+
+
 # Create main window.
 window = Tk()
 window.title("Sign Pixel Editor")
 window.geometry("400x400")
 window.resizable(False, False)
 window.grid_columnconfigure(0,weight=1)
+globalDraw = True
+globalErase = False
+
+def toggleDraw():
+    global globalDraw 
+    globalDraw = not globalDraw
 
 
+def toggleErase():
+    global globalErase
+    global globalDraw 
+    if globalErase:     
+        globalErase = not globalErase
+        globalDraw = True
+    else:
+        globalErase = not globalErase
+        globalDraw = False
+
+
+keyboard.on_press_key("d", lambda _:toggleDraw())
+keyboard.on_press_key("e", lambda _:toggleErase())
 
 # Rows = 8; Colums = 128 / 8
 #totalPixels = 512
@@ -70,10 +92,17 @@ class ToolTip(object):
 
 def CreateToolTip(widget, text):
     toolTip = ToolTip(widget)
+    global globalDraw
+    global globalErase
+    
     def enter(event):
         toolTip.showtip(text)
+        if globalDraw:
+            changeArray(widget)
     def leave(event):
         toolTip.hidetip()
+        if globalErase and Tk.cget(widget,"bg") == "green":
+            changeArray(widget)
     widget.bind('<Enter>', enter)
     widget.bind('<Leave>', leave)
 #######################################################
