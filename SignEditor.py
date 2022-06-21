@@ -97,7 +97,7 @@ def CreateToolTip(widget, text):
     
     def enter(event):
         toolTip.showtip(text)
-        if globalDraw:
+        if globalDraw and Tk.cget(widget,"bg") == "black":
             changeArray(widget)
     def leave(event):
         toolTip.hidetip()
