@@ -36,15 +36,9 @@ def toggleErase():
 keyboard.on_press_key("d", lambda _:toggleDraw())
 keyboard.on_press_key("e", lambda _:toggleErase())
 
-# Rows = 8; Colums = 128 / 8
-#totalPixels = 512
-#maximumPixelHeight = 16
-
 totalPixels = 3250
 maximumPixelHeight = 45
 
-
-#window.geometry(str((totalPixels // 8) * 59) + "x500")
 window.geometry(str((totalPixels // 8) * 8) + "x" + str((maximumPixelHeight) * 32))
 
 
@@ -128,9 +122,6 @@ def changeArray(selected):
         selected.currentPixelIndex = 0
         for x in range(markedIndex+1,len(pixelOrder)+1):
             pixelOrder[x-1][1].currentPixelIndex -= 1
-            #print(pixelOrder[x-1][1].currentPixelIndex, "deleted")
-        #print("New data values:")
-        #print(pixelOrder)
 
 
 # Assign button to index in ascending order (starting from 0)
@@ -157,10 +148,6 @@ for i in range(1,totalPixels+1):
     if (i % maximumPixelHeight == 0):
         currentRow = 3
         currentSet += 1
-
-
-#print("Initial data values:")
-#print(dataValues)
 
 def removeData():
     global dataValues
@@ -199,26 +186,15 @@ def importData():
         buttonValue.currentPixelIndex = 0
     pixelOrder = []
     raw_data = re.sub("[{}]", "", input('Input data set:\n')).split(", ")
-
-    #print(raw_data)
     print("----------------------------------------------------")
     for x in range(0, len(raw_data)):
         dataset = raw_data[x].split(",")
         vectorvalue = (int(dataset[0]),int(dataset[1]))
         for d in range(0,len(dataValues)):
-            #print(dataValues[d][0][0], vectorvalue[0])
-            #print("and")
-            #print(dataValues[d][0][0], vectorvalue[1])
             if dataValues[d][0][0] == vectorvalue[0] and dataValues[d][0][1] == vectorvalue[1]:
                 changeArray(dataValues[d][1])
                 continue
     print("Successfully imported data")
-
-    #newPixelIndex = len(pixelOrder)
-    #pixelOrder.append([dataValues[selected.bIndex][0],selected])
-    #selected.currentPixelIndex = newPixelIndex
-    #selected.isActive = True
-    #selected.configure(bg="green")
 
 clearData = Button(window,text="Clear",padx=8,pady=8,width=5,bg="white",command=removeData)
 clearData.grid(row=0,rowspan=1,column=0)
@@ -228,9 +204,6 @@ clearData.grid(row=1,rowspan=1,column=0)
 
 importData = Button(window,text="Import Data",padx=8,pady=8,width=7,bg="white",command=importData)
 importData.grid(row=2,rowspan=1,column=0)
-
-#currentEntry = Label(window,text = "",font=("Arial","15"),padx=45)
-#currentEntry.grid(row=0, rowspan=1, column=5)
 
 window.mainloop()
 
