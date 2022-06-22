@@ -3,6 +3,7 @@
 
 from tkinter import *
 import re
+from tkinter import ttk
 
 import keyboard # pip install keyboard
 
@@ -39,12 +40,13 @@ keyboard.on_press_key("e", lambda _:toggleErase())
 #totalPixels = 512
 #maximumPixelHeight = 16
 
-totalPixels = 1024
-maximumPixelHeight = 32
+totalPixels = 3250
+maximumPixelHeight = 45
 
 
 #window.geometry(str((totalPixels // 8) * 59) + "x500")
-window.geometry(str((totalPixels // 8) * 25) + "x" + str((maximumPixelHeight) * 32))
+window.geometry(str((totalPixels // 8) * 8) + "x" + str((maximumPixelHeight) * 32))
+
 
 pixelOrder = []
 buttons = {}
@@ -139,11 +141,11 @@ def assignButton(button):
 
 # Default button schema best looking button
 for i in range(1,totalPixels+1):
-    buttons[str(i)] = NewButton(window,text=i,padx=1,pady=1,width=5,bg="black")
+    buttons[str(i)] = NewButton(window,text=i,padx=.5,pady=.5,width=3,bg="black")
     CreateToolTip(buttons[str(i)],"Ida")
 
 currentSet = 1
-currentRow = 0
+currentRow = 3
 # When you're too tired to copy and paste 20 buttons but you take longer to do it this way anyway:
 for i in range(1,totalPixels+1):
     index = buttons[str(i)]
@@ -153,7 +155,7 @@ for i in range(1,totalPixels+1):
     dataValues.append([(currentSet,currentRow),buttons[str(i)],0])
     index.grid(row=currentRow, rowspan=1, column=currentSet+1)
     if (i % maximumPixelHeight == 0):
-        currentRow = 0
+        currentRow = 3
         currentSet += 1
 
 
@@ -186,14 +188,45 @@ def printData():
             assembledRDict += re.sub("[() ]", "",  str(pixelOrder[value-1][0])) + "}"
     print(assembledRDict)
 
+def importData():
+    global dataValues
+    global pixelOrder
+    for button in buttons:
+        buttonValue = buttons[button]
+        dataValues[buttonValue.bIndex-1][1] = buttonValue
+        buttonValue.isActive = False
+        buttonValue.configure(bg="black")
+        buttonValue.currentPixelIndex = 0
+    pixelOrder = []
+    raw_data = re.sub("[{}]", "", input('Input data set:\n')).split(", ")
 
+    #print(raw_data)
+    print("----------------------------------------------------")
+    for x in range(0, len(raw_data)):
+        dataset = raw_data[x].split(",")
+        vectorvalue = (int(dataset[0]),int(dataset[1]))
+        for d in range(0,len(dataValues)):
+            #print(dataValues[d][0][0], vectorvalue[0])
+            #print("and")
+            #print(dataValues[d][0][0], vectorvalue[1])
+            if dataValues[d][0][0] == vectorvalue[0] and dataValues[d][0][1] == vectorvalue[1]:
+                changeArray(dataValues[d][1])
+    print("Successfully imported data")
+
+    #newPixelIndex = len(pixelOrder)
+    #pixelOrder.append([dataValues[selected.bIndex][0],selected])
+    #selected.currentPixelIndex = newPixelIndex
+    #selected.isActive = True
+    #selected.configure(bg="green")
 
 clearData = Button(window,text="Clear",padx=8,pady=8,width=5,bg="white",command=removeData)
-clearData.grid(row=maximumPixelHeight+1,rowspan=1,column=0)
+clearData.grid(row=0,rowspan=1,column=0)
 
 clearData = Button(window,text="Print Data",padx=8,pady=8,width=5,bg="white",command=printData)
-clearData.grid(row=maximumPixelHeight+2,rowspan=1,column=0)
+clearData.grid(row=1,rowspan=1,column=0)
 
+importData = Button(window,text="Import Data",padx=8,pady=8,width=7,bg="white",command=importData)
+importData.grid(row=2,rowspan=1,column=0)
 
 #currentEntry = Label(window,text = "",font=("Arial","15"),padx=45)
 #currentEntry.grid(row=0, rowspan=1, column=5)
