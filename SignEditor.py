@@ -211,6 +211,7 @@ def importData():
             #print(dataValues[d][0][0], vectorvalue[1])
             if dataValues[d][0][0] == vectorvalue[0] and dataValues[d][0][1] == vectorvalue[1]:
                 changeArray(dataValues[d][1])
+                continue
     print("Successfully imported data")
 
     #newPixelIndex = len(pixelOrder)
